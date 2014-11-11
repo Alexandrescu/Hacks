@@ -17,7 +17,12 @@ Plugin 'tpope/vim-git'
 Plugin 'scrooloose/nerdtree'
 Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/syntastic'
+
 Plugin 'elzr/vim-json'
+Plugin 'pangloss/vim-javascript'
+Plugin 'maksimr/vim-jsbeautify'
+Plugin 'Lokaltog/vim-easymotion'
+
 
 "Styling plugins
 Plugin 'nathanaelkane/vim-indent-guides'
@@ -27,6 +32,7 @@ call vundle#end()            " required
 filetype plugin indent on    " required
 
 let mapleader=","
+map <Leader> <Plug>(easymotion-prefix)
 
 set expandtab
 set ttyscroll=10
@@ -37,6 +43,11 @@ set nobackup
 set hlsearch
 set ignorecase
 set smartcase
+
+set smartindent
+set tabstop=2
+set shiftwidth=2
+set expandtab
 
 syntax enable
 
