@@ -1,0 +1,88 @@
+# Git branch in prompt.
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
+export PS1="\[\033[31m\]A.A.: \[\033[32m\]\W\[\033[34m\]\$(parse_git_branch)\[\033[33m\] >\[\033[m\] "
+
+# Colors for mac
+export CLICOLOR=1
+export LSCOLORS=ExFxBxDxCxegedabagacad
+
+# new colorful ls
+alias ls='ls -GFh'
+
+export PATH=$PATH:~/Work/www/playActivator
+
+# This is an alias to kill the dock if it blocks
+alias resetDock="rm ~/Library/Application\ Support/Dock/*.db ; killall Dock"
+
+alias gw='./gradlew'
+
+# My git aliases
+alias gco='git commit'
+alias gst='git status'
+alias gdf='git diff'
+alias ga='git add'
+alias gtree='git log --graph --decorate --oneline'
+alias hgrep='history | grep'
+alias ll='ls -l'
+
+# Global npm brew thing
+# export PATH="$HOME/.npm-packages/bin:$PATH"
+
+# History controls
+export HISTFILESIZE=1000000
+export HISTSIZE=1000000
+export SHELL_SESSION_HISTORY=0
+# Avoid duplicates
+export HISTCONTROL=ignoredups:erasedups
+# When the shell exits, append to the history file instead of overwriting it
+shopt -s histappend
+# After each command, append to the history file and reread it
+export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
+
+# added by Anaconda2 4.2.0 installer
+# export PATH="/Users/aalexandrescu/anaconda2/bin:$PATH"
+
+# Cleaning old branches
+gstale() {
+        if [ "$1" = "" ]; then
+                git branch --merged | grep -v "\*"
+        else
+                git branch --merged $1 | grep -v "\*$1"
+        fi
+}
+
+alias gdelete='gstal $1 | xargs -n 1 git branch -d'
+
+# yarn in global path
+# Yarn 1.3.2
+# export PATH="$(yarn global bin):$PATH"
+# Yarn 1.7.0
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+# added by Miniconda2 4.3.14 installer
+export PATH="/Users/aalexandrescu/miniconda2/bin:$PATH"
+
+# setting JAVA_HOME
+export JAVA_HOME=$(/usr/libexec/java_home)
+
+# adding python bin to path
+export PATH="/Users/aalexandrescu/Library/Python/2.7/bin:$PATH"
+
+alias openFiles='lsof -Fpcn | awk '\''
+ /^p/ { pid=substr($0,2) }
+ /^c/ { cmd=substr($0,2) }
+ /^n/ { fd[cmd"["pid"]"]++ }
+ END  { for (cc in fd) printf("%-40s %i\n",cc,fd[cc]) } '\'' | sort -n -k 2'
+
+function RemoveBranchesFunction() {
+        git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -d
+}
+function ForceRemoveBranchesFunction() {
+        git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D
+}
+
+alias cleanBranches=RemoveBranchesFunction
+alias forceCleanBranches=ForceRemoveBranchesFunction
